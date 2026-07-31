@@ -68,11 +68,16 @@ weights onto the scalp as "connectivity" — both are ill-posed or over-claiming
 ├── notebooks/            # exploratory analysis
 ├── configs/              # experiment configs
 ├── results/figures/      # generated outputs (git-ignored)
-├── docs/                 # research plan, notes, abstract drafts
+├── docs/                 # research plan, submission strategy, notes
 └── tests/                # unit tests
 ```
 
 ---
+
+## Documentation
+
+- [`docs/research-plan.md`](docs/research-plan.md) — technical decisions and decision log (the *why*).
+- [`docs/submission-strategy.md`](docs/submission-strategy.md) — positioning, submission pathway, timeline, and risk management.
 
 ## Getting started
 
