@@ -1,0 +1,72 @@
+# ─── Data & models (never commit large binaries) ───────────────────────────
+data/raw/*
+data/processed/*
+data/external/*
+!data/**/.gitkeep
+*.edf
+*.bdf
+*.gdf
+*.set
+*.fif
+*.fif.gz
+*.npy
+*.npz
+*.h5
+*.hdf5
+*.zarr
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+models/
+checkpoints/
+
+# Downloaded pretrained weights / HF cache
+.cache/
+*.bin
+
+# ─── Results (keep the folder, ignore heavy outputs) ───────────────────────
+results/*
+!results/.gitkeep
+!results/figures/.gitkeep
+
+# ─── Python ─────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.installed.cfg
+*.egg
+
+# Environments
+.venv/
+venv/
+env/
+ENV/
+.python-version
+.conda/
+
+# ─── Notebooks ──────────────────────────────────────────────────────────────
+.ipynb_checkpoints/
+*/.ipynb_checkpoints/*
+
+# ─── Testing / tooling ──────────────────────────────────────────────────────
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# ─── IDE / OS ───────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# ─── Secrets / local config ─────────────────────────────────────────────────
+.env
+*.local
