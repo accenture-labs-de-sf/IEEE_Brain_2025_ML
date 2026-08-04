@@ -60,9 +60,47 @@ one-dataset fluke.
 - ✅ EEGPT ingests standard montages (name-keyed embeddings); PhysioNet MI needs
   `eegbci.standardize()` on channel names; resample to a common `sfreq`.
 - ✅ Model is small (~25M) → laptop-friendly.
-- 🟡 **Remaining gate — embedding smoke test:** install `braindecode[hub]` + `torch` + `mne`, pull
+- ✅ **Ingestion pipeline built** (`src/eegxai/data/physionet_mi.py`): memory-conscious,
+  partial download, float32 epochs, per-subject QC. See memory strategy below.
+- ✅ **Data-understanding checks done** (subjects 1–3): 160 Hz / 64 ch / balanced ~23–22
+  trials; per-subject noise varies (subject 3 ~5.6% high-amplitude vs <1.5%). Mu-band ERD
+  shows clear central sensorimotor desync during imagery, **but clean contralateral C3/C4
+  lateralization needs cross-subject aggregation** (weak at n=1). The faithfulness ground
+  truth exists; it just requires averaging / sharper spatial methods to surface cleanly.
+- 🟡 **Remaining gate — embedding smoke test:** install `braindecode[hub]` + `torch`, pull
   EEGPT, run a few hundred MI epochs, confirm embeddings are non-degenerate and that left/right is
   linearly decodable above chance. Until this passes, downstream analysis is unverified.
+
+## Data engineering & memory strategy
+
+Target budget: a laptop or free Colab (~12 GB RAM). Principle: **less is better — load the
+smallest thing an analysis actually needs, and release it promptly.** Five access tiers
+(`src/eegxai/data/physionet_mi.py`), leanest first:
+
+1. **`iter_subject_epochs`** — generator; one subject resident at a time, `del` + `gc.collect()`
+   between subjects. Default for whole-dataset loops (e.g. extract EEGPT embeddings, keep only the
+   embeddings).
+2. **`collect_features`** — cross-subject reduction that keeps only each subject's *small* output,
+   one vector **per subject** (RSA vectors, per-subject scores, ERD maps).
+3. **`iter_subject_batches(…, batch_size=K)`** — bounded middle ground: ~K subjects resident at
+   once. Tune `K` to the RAM budget when an analysis needs several subjects together but not all.
+4. **`collect_trial_features`** — retains **all** subjects but only as compact *per-trial* features
+   (embeddings), never raw epochs. The natural tier for RSA / probing over the full dataset.
+5. **`load_concatenated`** — deliberate high-ceiling path that stacks all raw epochs into one array,
+   **guarded by `max_gb`** with a pre-flight estimate (`estimate_epoch_memory`). Opt into more RAM
+   on purpose; otherwise it raises and points you back to the leaner tiers.
+
+Tiers 2–4 are where cross-subject work lives: the raised "ceiling" is for compact **derived**
+results, never the raw epochs. Tier 5 is the only one that holds raw data for everyone, and it is
+guarded.
+
+Memory levers exposed on the loaders (each also shrinks RAM): `channels` (spatial subset, dropped
+early), `resample_sfreq` (temporal), `tmin`/`tmax` (window), `classes`, and `dtype` (float32
+default — half of float64). Reference point: ~8 MB/subject as float32; ~0.9 GB for all 109 subjects
+at once (so tier-3 is feasible for the whole set, but tiers 1–2 remain the default).
+
+Colab note: point MNE's cache at Drive (`mne.set_config("MNE_DATA", ...)`) to avoid re-downloading
+each session.
 
 ## 7. Open decisions
 
