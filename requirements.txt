@@ -14,6 +14,11 @@ torch>=2.1
 braindecode[hub]>=0.8   # EEGPT + Hugging Face Hub integration
 huggingface_hub>=0.20
 
+# Reporting (Markdown -> PDF overview; self-contained, no system deps)
+markdown>=3.5
+xhtml2pdf>=0.2.16
+pillow>=10.0
+
 # Utilities
 tqdm>=4.66
 pyyaml>=6.0          # experiment configs

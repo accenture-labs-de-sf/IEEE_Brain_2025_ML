@@ -102,7 +102,68 @@ at once (so tier-3 is feasible for the whole set, but tiers 1–2 remain the def
 Colab note: point MNE's cache at Drive (`mne.set_config("MNE_DATA", ...)`) to avoid re-downloading
 each session.
 
+## Preprocessing — match EEGPT
+
+> Full implemented detail: [`preprocessing.md`](preprocessing.md).
+
+**Lean:** keep preprocessing as close as possible to what EEGPT was pretrained with, so the
+model receives in-distribution input. Heavy custom cleaning risks pushing inputs *out* of
+distribution and is avoided.
+
+EEGPT's expected recipe (from the paper; **verify against braindecode's EEGPT transform** at
+implementation time):
+- **Resample to 256 Hz** — our PhysioNet MI data is 160 Hz, so we **upsample 160 → 256** (expected,
+  not optional; use the loader's `resample_sfreq`).
+- **Global average reference.**
+- **Amplitude scaling to mV.**
+- **4 s windows.**
+- **~0–38 Hz band-pass** (low-pass) for motor-imagery downstream — this also suppresses 60 Hz line
+  noise, so a separate notch is likely unnecessary.
+- **z-score** normalization (some configs use Euclidean Alignment per session).
+
+Cleaning stays light: rely on EEGPT's band-pass; exclude only the worst QC-flagged subjects rather
+than aggressively scrubbing artifacts.
+
+## First main analysis — empirical dataset characterization (before RSA)
+
+Before any model/RSA work, characterize the dataset **across all participants** to establish the
+empirical reference EEGPT's representations are later compared against:
+- **Group PSD** (topographic + at C3/C4) — the alpha/mu spectral fingerprint.
+- **Mu/beta ERD topographies + a C3/C4 lateralization index per class** — the contralateral
+  sensorimotor signature (emerges across many subjects; muted at n≈3).
+- **ERSP** (time–frequency) at C3/C4 — the mu/beta suppression time course and best task window.
+- **CSP + LDA decodability per subject** — the signal ceiling and cross-subject spread.
+
+Neuro reminder (so results are read correctly): **mu is a *central* sensorimotor rhythm (C3/Cz/C4),
+not occipital**; the ~10 Hz occipital peak is *alpha* (visual). Motor imagery yields mu/beta **ERD
+(power *decrease*), contralateral** to the imagined hand — not occipital "activation". The "mu break"
+is best shown as a baseline→task power drop at C3/C4, not in a whole-head averaged PSD.
+
+## Relationship to EEGPT's published work (replicate vs. new)
+
+Paper trail for *why* the empirical characterization is framed the way it is:
+
+- **PhysioNet MI is one of EEGPT's *pretraining* datasets** — our data is therefore
+  *in-distribution* for the model. Representations here are faithful (not degraded transfer),
+  which strengthens interpretability claims. Caveat: this is consequently **not** a zero-shot
+  transfer result.
+- EEGPT's **downstream** motor-imagery evaluation used **BCIC-2A / 2B** with **classification
+  accuracy** (linear probing); it did **not** use PhysioNet MI downstream.
+- The EEGPT paper reports **classification / representation metrics only — no mu/ERD or other
+  neurophysiology.**
+
+Implications:
+- Our **mu contralateral ERD + PSD** characterization is the **classical reference**
+  (Pfurtscheller ERD/ERS; MNE ERDS-map method) — **not** a replication of anything EEGPT
+  published.
+- **Novel contribution:** linking EEGPT's learned representation to that neurophysiology via
+  XAI / RSA — the gap the paper left open (it proved accuracy, never showed the representation
+  encodes known brain structure).
+
 ## 7. Open decisions
+
+> Empirical-characterization method choices (ERD sharpening, ERDS, bands, etc.) live in
+> [`findings-and-options.md`](findings-and-options.md) — options gated on references, not yet chosen.
 
 - Exact SSVEP dataset from MOABB.
 - Precise probing targets and RSA distance metric.

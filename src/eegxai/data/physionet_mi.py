@@ -54,6 +54,7 @@ def load_subject_raw(
     runs: Sequence[int] = IMAGERY_LEFT_RIGHT,
     *,
     channels: Sequence[str] | None = None,
+    reference: str | Sequence[str] | None = None,
     resample_sfreq: float | None = None,
     notch_freqs: float | Sequence[float] | None = None,
     l_freq: float | None = None,
@@ -81,6 +82,9 @@ def load_subject_raw(
 
     if channels is not None:
         raw.pick(list(channels))  # drop unused electrodes early to stay lean
+
+    if reference is not None:
+        raw.set_eeg_reference(reference, verbose=verbose)  # e.g. "average" to match EEGPT
 
     if notch_freqs is not None:
         raw.notch_filter(notch_freqs, verbose=verbose)
@@ -112,12 +116,17 @@ def quick_qc(
     *,
     amp_threshold_uv: float = 150.0,
     classes: Sequence[str] = ("T1", "T2"),
+    expected_sfreq: float = EXPECTED_SFREQ,
 ) -> SubjectQC:
-    """Cheap sanity/quality checks — catch subjects that would silently corrupt analysis."""
+    """Cheap sanity/quality checks — catch subjects that would silently corrupt analysis.
+
+    ``expected_sfreq`` defaults to the raw acquisition rate (160 Hz); pass the post-resample
+    rate (e.g. 256 Hz) when QC-ing already-preprocessed data.
+    """
     notes: list[str] = []
     sfreq = float(raw.info["sfreq"])
     n_ch = len(raw.ch_names)
-    if abs(sfreq - EXPECTED_SFREQ) > 1e-3:
+    if abs(sfreq - expected_sfreq) > 1e-3:
         notes.append(f"unexpected sfreq={sfreq}")
     if n_ch != EXPECTED_N_CHANNELS:
         notes.append(f"unexpected n_channels={n_ch}")
