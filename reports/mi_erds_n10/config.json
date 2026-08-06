@@ -1,0 +1,62 @@
+{
+  "name": "mi_erds",
+  "created_utc": "20260806T230536Z",
+  "versions": {
+    "python": "3.13.14",
+    "mne": "1.12.1",
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "matplotlib": "3.11.1",
+    "pandas": "3.0.5"
+  },
+  "config": {
+    "dataset": "PhysioNet EEGMMIDB (imagery)",
+    "subjects": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "runs": [
+      4,
+      8,
+      12
+    ],
+    "preprocessing_eegpt": {
+      "reference": "average",
+      "l_freq": null,
+      "h_freq": 38.0,
+      "resample_sfreq": 256.0
+    },
+    "method": "MNE ERDS: multitaper TFR + percent baseline",
+    "freqs_hz": [
+      2.0,
+      35.0
+    ],
+    "n_cycles": "= freqs",
+    "baseline_s": [
+      -1.0,
+      0.0
+    ],
+    "baseline_mode": "percent",
+    "decim": 3,
+    "mu_band_hz": [
+      8.0,
+      13.0
+    ],
+    "task_win_s": [
+      0.5,
+      3.5
+    ],
+    "classes": {
+      "T1": "imagine LEFT fist",
+      "T2": "imagine RIGHT fist"
+    }
+  }
+}
