@@ -126,6 +126,9 @@ than aggressively scrubbing artifacts.
 
 ## First main analysis — empirical dataset characterization (before RSA)
 
+> Method now implemented: canonical MNE ERDS (multitaper TFR + percent baseline) —
+> see [`analysis-methods.md`](analysis-methods.md).
+
 Before any model/RSA work, characterize the dataset **across all participants** to establish the
 empirical reference EEGPT's representations are later compared against:
 - **Group PSD** (topographic + at C3/C4) — the alpha/mu spectral fingerprint.

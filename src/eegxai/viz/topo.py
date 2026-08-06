@@ -18,11 +18,14 @@ def plot_erd_grid(
     info: mne.Info,
     band: tuple[float, float],
     out_path: str | Path,
+    *,
+    cmap: str = "RdBu",
+    unit_label: str = "% change vs baseline  ·  red = ERD",
 ) -> Path:
     """Grid of ERD topomaps: one row per (label, erd_dict), one column per class.
 
     Shared symmetric color scale across the whole grid so rows are comparable (e.g. per
-    subject + a group mean). Blue = desynchronization.
+    subject + a group mean). Default convention (percent, MNE ERDS): **red = ERD**.
     """
     vmax = max(float(np.abs(erd[c]).max()) for _lbl, erd in rows for c in classes)
     nrow, ncol = len(rows), len(classes)
@@ -32,11 +35,11 @@ def plot_erd_grid(
         for c, cls in enumerate(classes):
             ax = axes[r][c]
             im, _ = mne.viz.plot_topomap(erd[cls], info, axes=ax, show=False,
-                                         cmap="RdBu_r", vlim=(-vmax, vmax), contours=4)
+                                         cmap=cmap, vlim=(-vmax, vmax), contours=4)
             title = _CLASS_LABEL.get(cls, cls)
             ax.set_title(f"{label} — {title}", fontsize=10)
     cbar = fig.colorbar(im, ax=axes.ravel().tolist(), fraction=0.025, pad=0.04)
-    cbar.set_label(f"{band[0]:.0f}–{band[1]:.0f} Hz ERD (dB)  ·  blue = desync")
+    cbar.set_label(f"{band[0]:.0f}–{band[1]:.0f} Hz  ·  {unit_label}")
     out_path = Path(out_path)
     fig.savefig(out_path, dpi=120, bbox_inches="tight")
     plt.close(fig)
