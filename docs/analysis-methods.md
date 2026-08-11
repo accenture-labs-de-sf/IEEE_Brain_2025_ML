@@ -32,9 +32,9 @@ phenomenon from central *mu*; the blue (ERS) often seen posteriorly is not the m
 
 1. **Preprocess** (match EEGPT): average reference, 0–38 Hz band-pass, resample 160→256 Hz.
    See [`preprocessing.md`](preprocessing.md).
-2. **Epoch** around each imagery cue: `tmin = -1.5 s`, `tmax = 4.0 s`, **no** epoch baseline
-   (baseline is applied later, to the time-frequency data). `tmin` precedes the −1 s baseline so
-   the reference window is fully inside the epoch.
+2. **Epoch** around each imagery cue with a buffer: `tmin = -2.0 s`, `tmax = 4.5 s`, **no** epoch
+   baseline (applied later, to the TFR). After the TFR baseline, **crop to −1..3.9 s** to discard
+   multitaper edge ringing (the buffer also keeps the −1..0 s baseline itself free of edge effects).
 3. **Time-frequency (multitaper)**: `epochs.compute_tfr(method="multitaper", freqs=2..35 Hz,
    n_cycles=freqs, decim=3)`. This estimates power at each frequency over time.
 4. **Baseline correction (percent)**: `apply_baseline((-1, 0), mode="percent")` — express each
@@ -67,16 +67,41 @@ phenomenon from central *mu*; the blue (ERS) often seen posteriorly is not the m
 - Posterior blue on topographies = occipital **alpha** increase (visual), a separate phenomenon
   from central **mu** — do not conflate them.
 
-## Still open (rigor / sharpening — see `findings-and-options.md`)
+## Significance (cluster-permutation)
 
-- **Cluster-based permutation statistics** (as in the MNE example) for significance — not yet
-  added; the current maps/topographies are descriptive.
-- Optional spatial sharpening (surface Laplacian) and more subjects to strengthen the (weaker)
-  LEFT-hand lateralization.
+Implemented in `eegxai.analysis.stats.cluster_test_map`. Group-level **two-sided one-sample test
+across subjects**, per channel/class (`mne.stats.permutation_cluster_1samp_test`; cluster-forming
+t-threshold at p=0.05, 1024 sign-flip permutations): neighbouring supra-threshold time-frequency
+points are grouped into clusters, and each cluster is tested against the permutation null.
+Outlined regions on the ERDS maps have cluster **p < 0.05**, correcting for the many
+time-frequency comparisons. This is the significance layer of the MNE ERDS recipe.
 
-## References
+## Still open (optional refinements — see `findings-and-options.md`)
 
-- Pfurtscheller & Lopes da Silva (1999), *Event-related EEG/MEG synchronization and
-  desynchronization: basic principles*, Clin. Neurophysiol.
-- MNE-Python ERDS-maps example:
+- Optional spatial sharpening (surface Laplacian) to further sharpen the (weak) LEFT lateralization,
+  and scaling to n > 20 / all 109. Edge-cropping and cluster stats are now applied; at **n=20 all
+  six channel×class ERDs are significant**.
+
+## References (method grounding)
+
+**Analysis 1 — ERD/ERDS via time-frequency + baseline:**
+- Pfurtscheller & Lopes da Silva (1999). *Event-related EEG/MEG synchronization and
+  desynchronization: basic principles.* Clin. Neurophysiol. 110(11):1842–1857. — the ERD/ERS
+  percent-baseline method.
+- MNE-Python ERDS-maps example (multitaper TFR + percent baseline) — reference implementation:
   https://mne.tools/stable/auto_examples/time_frequency/time_frequency_erds.html
+- Recent practice (2023–2025) using baseline-corrected TFR ERD/ERS in mu (8–13 Hz) and beta
+  (13–30 Hz): tactile-imagery ERD, *eNeuro* 10(6) 2023 (ENEURO.0455-22.2023); motor-imagery ERD,
+  *Front. Hum. Neurosci.* 2025 (10.3389/fnhum.2025.1545492). Note: Morlet wavelets are the common
+  alternative TFR method; multitaper (used here, per the MNE example) is equally standard.
+
+**Analysis 2 — cluster-based permutation statistics:**
+- Maris & Oostenveld (2007). *Nonparametric statistical testing of EEG- and MEG-data.* J.
+  Neurosci. Methods 164(1):177–190. doi:10.1016/j.jneumeth.2007.03.024 — the canonical
+  cluster-permutation method (FWER control exploiting time/frequency/space adjacency), implemented
+  by MNE's `permutation_cluster_1samp_test`.
+- Recent (2025): Rousselet. *Using cluster-based permutation tests to estimate MEG/EEG onsets: how
+  bad is it?* Eur. J. Neurosci. doi:10.1111/ejn.16618 — confirms current use, and cautions that
+  cluster p-values are **cluster-level, not point-wise**: an outlined region shows *that* a
+  significant effect exists, **not** its exact onset/boundaries (so don't over-read cluster edges).
+  The MNE ERDS example (v1.12) applies the same test — the documented standard for ERDS maps.

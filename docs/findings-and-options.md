@@ -5,32 +5,42 @@ Living log: what the exploratory results show, and the candidate options they su
 reference applying it to *this* data / analysis type, and it fits the "match EEGPT / stay
 in-distribution" lean. Updated as results accrue.
 
-## Findings so far (exploratory; subjects 1–10)
+## Findings so far (n=20, canonical ERDS + cluster stats, edge-cropped)
 
-Method: **canonical MNE ERDS** — multitaper TFR + percent baseline (see
+Method: **canonical MNE ERDS** — multitaper TFR + percent baseline, buffered epochs cropped to
+−1..3.9 s (removes edge ringing), group cluster-permutation stats (see
 [`analysis-methods.md`](analysis-methods.md)). EEGPT-matched preprocessing.
 
-- ERDS maps at C3/Cz/C4 show clear post-cue **mu (~10 Hz) and beta (~20 Hz) ERD** during
-  imagery, over a flat baseline.
-- **RIGHT-hand imagery:** clearly contralateral — lateralization index (mu ERD C3 − C4)
-  ≈ **−8.9%** (expected < 0). ✓ strong.
-- **LEFT-hand imagery:** correct direction but weak — index ≈ **+0.7%** (expected > 0). ~
-- Switching from the band-power quick-look (dB) to the canonical percent-baseline TFR **improved**
-  lateralization (LEFT went from ~0 to correctly signed).
-- High per-subject variability remains; group topography is clean for RIGHT, bilateral for LEFT.
+- ERDS maps show clear post-cue **mu (~10 Hz) and beta (~20 Hz) ERD** at C3/Cz/C4, over a flat
+  baseline, with clean edges.
+- **All six channel×class effects are significant** (cluster p<0.05): RIGHT — C3 **0.001**, Cz
+  0.003, C4 0.006; LEFT — C3 0.012, Cz 0.037, **C4 0.020**.
+- **Lateralization:** RIGHT clearly contralateral (C3), index (mu C3−C4) **−6.7%**; LEFT weak bias
+  toward C4, **+0.6%**. Both hemispheres significantly engage, with a contralateral bias strong for
+  RIGHT and weak for LEFT.
+- Scaling n=10→20 pushed **C4/LEFT from a trend (p=0.074) to significant (p=0.020)**, as predicted.
+- Interpretation caveat (Rousselet 2025): cluster p is **cluster-level, not point-wise** — report
+  *that* an effect is significant, not the exact time-frequency boundaries.
 
 ## Adopted
 
 - **Canonical MNE ERDS pipeline** (multitaper TFR + percent baseline; Pfurtscheller & Lopes da
   Silva 1999; MNE ERDS example). This is the current empirical-reference method — see
   [`analysis-methods.md`](analysis-methods.md).
+- **Cluster-permutation significance** (group one-sample; MNE `permutation_cluster_1samp_test`;
+  **Maris & Oostenveld 2007**, the canonical EEG/MEG cluster-permutation reference). Implemented
+  (`eegxai.analysis.stats`); results above.
+- **Edge-cropping** — buffered epochs (−2..4.5 s) cropped to −1..3.9 s after baseline, removing
+  multitaper edge ringing (standard TFR practice). Applied.
+
+Both adopted methods are grounded in canonical + recent (2023–2025) literature — see the
+References section of [`analysis-methods.md`](analysis-methods.md).
 
 ## Candidate options (pick from; each gated on evidence)
 
 | Option | What it addresses | Reference status (verify before adopting) |
 | --- | --- | --- |
-| Cluster-based permutation stats | Significance of the ERDS maps (part of the canonical example) | MNE ERDS example (`permutation_cluster_1samp_test`) — **not yet added** |
-| Scale subjects (n → 20–30+) | Does lateralization tighten with n? | Standard; low commitment |
+| Scale further (n → 30+ / all 109) | Tighten estimates; test if the weak LEFT bias sharpens | Standard; low commitment (n=20 already all-significant) |
 | Surface Laplacian (small) at C3/C4 | Sharpen lateralization (esp. the muted LEFT class) | Common in Pfurtscheller MI work; **find a Laplacian-on-EEGMMIDB reference** before adopting |
 | CSP spatial filtering | Sharpen / decode lateralization | Blankertz 2008; MNE's CSP example **uses eegbci/EEGMMIDB** (direct ref). ⚠ **supervised** — see gate 3 |
 | Beta band (13–30 Hz) ERD/ERS | Complementary lateralizing signal | Standard MI finding; verify for this data |

@@ -27,6 +27,7 @@ from eegxai.data.preprocessing import EEGPT_RAW_KWARGS, EEGPT_SFREQ  # noqa: E40
 from eegxai.analysis.erd import (  # noqa: E402
     MU_BAND, DEFAULT_FREQS, BASELINE, make_epochs, class_tfrs, band_topography,
 )
+from eegxai.analysis.stats import cluster_test_map  # noqa: E402
 from eegxai.viz.topo import plot_erd_grid  # noqa: E402
 from eegxai.viz.tfr import plot_erds_maps  # noqa: E402
 from eegxai import io  # noqa: E402
@@ -35,6 +36,8 @@ CLASSES = ("T1", "T2")
 MAP_CHANNELS = ("C3", "Cz", "C4")
 TASK_WIN = (0.5, 3.5)
 DECIM = 3
+EPOCH_WIN = (-2.0, 4.5)   # buffered epoch — absorbs multitaper edge ringing (also cleans baseline)
+CROP_WIN = (-1.0, 3.9)    # analysis/display window kept after cropping the buffer
 
 
 def parse_args():
@@ -55,6 +58,7 @@ def main() -> None:
         "freqs_hz": [float(DEFAULT_FREQS[0]), float(DEFAULT_FREQS[-1])],
         "n_cycles": "= freqs", "baseline_s": list(BASELINE), "baseline_mode": "percent",
         "decim": DECIM, "mu_band_hz": list(MU_BAND), "task_win_s": list(TASK_WIN),
+        "epoch_win_s": list(EPOCH_WIN), "crop_win_s": list(CROP_WIN),
         "classes": {"T1": "imagine LEFT fist", "T2": "imagine RIGHT fist"},
     }
     run_dir = io.new_run_dir(args.out_base, "mi_erds", config=cfg)
@@ -74,8 +78,10 @@ def main() -> None:
             "high_amp_pct": round(qc.frac_high_amp * 100, 2), "ok": qc.ok,
         })
 
-        epochs = make_epochs(raw, classes=CLASSES)
+        epochs = make_epochs(raw, classes=CLASSES, tmin=EPOCH_WIN[0], tmax=EPOCH_WIN[1])
         tfrs = class_tfrs(epochs, decim=DECIM)
+        for _c in tfrs:  # crop the buffer off after baseline correction
+            tfrs[_c].crop(tmin=CROP_WIN[0], tmax=CROP_WIN[1])
 
         mu = {}
         for cls in CLASSES:
@@ -100,6 +106,12 @@ def main() -> None:
     group_mu = {c: np.mean([mu[c] for _l, mu in mu_topo_by_subj], axis=0) for c in CLASSES}
     group_maps = {k: np.mean(v, axis=0) for k, v in map_accum.items()}
 
+    # group cluster-permutation significance per (class, channel): where is ERD/ERS reliable?
+    sig: dict[tuple[str, str], np.ndarray] = {}
+    cluster_p: dict[tuple[str, str], float] = {}
+    for key, arrs in map_accum.items():
+        sig[key], cluster_p[key] = cluster_test_map(np.stack(arrs))
+
     # lateralization index (mu, C3 - C4): LEFT expect >0, RIGHT expect <0
     i3, i4 = ref_ch.index("C3"), ref_ch.index("C4")
     li = {c: float(group_mu[c][i3] - group_mu[c][i4]) for c in CLASSES}
@@ -112,15 +124,22 @@ def main() -> None:
             for ch, val in zip(ref_ch, mu[cls]):
                 rows.append({"subject": subj, "class": cls, "channel": ch,
                              "mu_pct": round(float(val), 2)})
+    stat_rows = [{"class": c, "channel": ch,
+                  "min_cluster_p": round(cluster_p[(c, ch)], 4),
+                  "significant": bool(sig[(c, ch)].any())}
+                 for c in CLASSES for ch in MAP_CHANNELS]
     qc_df = io.save_table(qc_rows, run_dir / "qc.csv")
     io.save_table(rows, run_dir / "erd_mu.csv")
+    stat_df = io.save_table(stat_rows, run_dir / "cluster_stats.csv")
     io.save_arrays(run_dir / "erds.npz",
                    ch_names=np.array(ref_ch), freqs=freqs, times=times,
                    **{f"group_mu_{c}": group_mu[c] for c in CLASSES},
-                   **{f"map_{c}_{ch}": group_maps[(c, ch)] for c in CLASSES for ch in MAP_CHANNELS})
+                   **{f"map_{c}_{ch}": group_maps[(c, ch)] for c in CLASSES for ch in MAP_CHANNELS},
+                   **{f"sig_{c}_{ch}": sig[(c, ch)] for c in CLASSES for ch in MAP_CHANNELS})
 
     # ── figures ──────────────────────────────────────────────────────────────
-    plot_erds_maps(group_maps, freqs, times, MAP_CHANNELS, CLASSES, figdir / "erds_maps.png")
+    plot_erds_maps(group_maps, freqs, times, MAP_CHANNELS, CLASSES,
+                   figdir / "erds_maps.png", sig=sig)
     plot_erd_grid([("Group mean", group_mu)], CLASSES, ref_info, MU_BAND,
                   figdir / "mu_topomap_group.png")
     plot_erd_grid(mu_topo_by_subj + [("Group mean", group_mu)], CLASSES, ref_info, MU_BAND,
@@ -134,20 +153,28 @@ subjects **{args.subjects}** (n={len(args.subjects)}).
 **Method (canonical).** MNE ERDS-maps recipe (Pfurtscheller & Lopes da Silva 1999): per-epoch
 **multitaper** TFR (freqs 2–35 Hz, `n_cycles = freqs`), **percent-change** baseline (−1→0 s),
 `decim={DECIM}`. Read-outs: ERDS time-frequency maps at C3/Cz/C4 and mu-band (8–13 Hz)
-topographies over the {TASK_WIN[0]}–{TASK_WIN[1]} s task window. Preprocessing matches EEGPT
-(average ref, 0–38 Hz, 256 Hz). Convention: **percent < 0 = ERD** (desync).
+topographies over the {TASK_WIN[0]}–{TASK_WIN[1]} s task window. Epochs are buffered
+({EPOCH_WIN[0]}–{EPOCH_WIN[1]} s) and cropped to {CROP_WIN[0]}–{CROP_WIN[1]} s after baseline to
+remove multitaper edge ringing. Preprocessing matches EEGPT (average ref, 0–38 Hz, 256 Hz).
+Convention: **percent < 0 = ERD** (desync).
 
 **Result — mu lateralization (group, C3 − C4).**
 - LEFT imagery (T1): **{li['T1']:+.1f}%** (expect > 0 → contralateral C4 desync)
 - RIGHT imagery (T2): **{li['T2']:+.1f}%** (expect < 0 → contralateral C3 desync)
 
 Central sensorimotor mu ERD is present during imagery; the ERDS maps show the mu/beta
-suppression time course at C3/Cz/C4. Clean bilateral-mirror lateralization sharpens with n and
-would sharpen further with spatial filtering / significance testing (see
-`docs/findings-and-options.md`). This is the empirical reference for later model comparison.
+suppression time course at C3/Cz/C4.
 
-Artifacts: `qc.csv`, `erd_mu.csv`, `erds.npz`, figures; `config.json` records exact parameters
-and package versions.
+**Significance (cluster-permutation, group n={len(args.subjects)}).** Two-sided one-sample cluster
+test vs baseline per channel/class; outlined regions on the ERDS maps are significant (p<0.05,
+corrected for the many time-frequency comparisons). Min cluster p — C3 during RIGHT imagery:
+{cluster_p[('T2', 'C3')]:.3f}; C4 during LEFT imagery: {cluster_p[('T1', 'C4')]:.3f}. Full table
+in `cluster_stats.csv`.
+
+This is the empirical reference for later model comparison.
+
+Artifacts: `qc.csv`, `erd_mu.csv`, `cluster_stats.csv`, `erds.npz`, figures; `config.json` records
+exact parameters and package versions.
 """.strip()
 
     figures = [
@@ -158,10 +185,12 @@ and package versions.
     ]
     md_path, pdf_path = io.write_report(
         run_dir, "Empirical ERDS Characterization — Motor Imagery", summary,
-        tables=[("Per-subject QC", qc_df)], figures=figures,
+        tables=[("Per-subject QC", qc_df), ("Cluster-permutation significance", stat_df)],
+        figures=figures,
     )
     print(f"Run folder : {run_dir}")
     print(f"  lateralization index (C3-C4 mu): LEFT {li['T1']:+.1f}%  RIGHT {li['T2']:+.1f}%")
+    print(f"  cluster p  : C3/RIGHT {cluster_p[('T2', 'C3')]:.3f}  C4/LEFT {cluster_p[('T1', 'C4')]:.3f}")
     print(f"  report     : {md_path.name}, {pdf_path.name}")
 
 

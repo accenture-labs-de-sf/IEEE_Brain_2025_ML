@@ -12,4 +12,4 @@ config with `scripts/exploration_report.py`.
 
 | Snapshot | Run | Summary |
 | --- | --- | --- |
-| `mi_erds_n10/` | canonical MNE ERDS, PhysioNet MI, subjects 1–10 | mu/beta ERD present; RIGHT lateralized (−8.9%), LEFT weak (+0.7%) |
+| `mi_erds_n20/` | canonical MNE ERDS + cluster stats (edge-cropped), PhysioNet MI, subjects 1–20 | all 6 channel×class ERDs significant (p<0.05); RIGHT contralateral (−6.7%), LEFT weak bias, C4/LEFT now significant |
