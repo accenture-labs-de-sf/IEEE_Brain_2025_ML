@@ -110,10 +110,10 @@ each session.
 model receives in-distribution input. Heavy custom cleaning risks pushing inputs *out* of
 distribution and is avoided.
 
-EEGPT's expected recipe (from the paper; **verify against braindecode's EEGPT transform** at
-implementation time):
-- **Resample to 256 Hz** — our PhysioNet MI data is 160 Hz, so we **upsample 160 → 256** (expected,
-  not optional; use the loader's `resample_sfreq`).
+EEGPT's expected recipe (**verified against the braindecode checkpoint config** — note this
+corrected the paper's stated 256 Hz to **250 Hz**):
+- **Resample to 250 Hz** — our PhysioNet MI data is 160 Hz, so we **upsample 160 → 250** (the
+  checkpoint's rate, not the paper's 256; use the loader's `resample_sfreq`).
 - **Global average reference.**
 - **Amplitude scaling to mV.**
 - **4 s windows.**

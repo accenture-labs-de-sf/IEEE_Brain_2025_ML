@@ -36,6 +36,13 @@ Method: **canonical MNE ERDS** — multitaper TFR + percent baseline, buffered e
 Both adopted methods are grounded in canonical + recent (2023–2025) literature — see the
 References section of [`analysis-methods.md`](analysis-methods.md).
 
+## TODO (unconfirmed by lead)
+
+- **Re-run the n=20 ERDS snapshot at 250 Hz.** The sampling rate was corrected 256 → **250 Hz**
+  (EEGPT's checkpoint rate) in the code, but the committed [`reports/mi_erds_n20/`](../reports/mi_erds_n20)
+  snapshot was computed at 256 Hz. Scientific conclusions are unchanged (250 vs 256 is negligible
+  for mu ERD), so this is a tidy-up only — **not yet confirmed / not yet done.**
+
 ## Candidate options (pick from; each gated on evidence)
 
 | Option | What it addresses | Reference status (verify before adopting) |

@@ -121,7 +121,7 @@ def quick_qc(
     """Cheap sanity/quality checks — catch subjects that would silently corrupt analysis.
 
     ``expected_sfreq`` defaults to the raw acquisition rate (160 Hz); pass the post-resample
-    rate (e.g. 256 Hz) when QC-ing already-preprocessed data.
+    rate (e.g. 250 Hz) when QC-ing already-preprocessed data.
     """
     notes: list[str] = []
     sfreq = float(raw.info["sfreq"])

@@ -55,6 +55,11 @@ analysis is deterministic (fixed permutation seed = 0), so numbers should match 
 
 If your numbers differ materially, that's a finding — raise it (don't paper over it).
 
+> Note: the committed `reports/mi_erds_n20/` snapshot was computed at **256 Hz**, before the
+> sampling rate was corrected to EEGPT's **250 Hz**. Current code runs at 250, so expect
+> *near-identical* (not bit-identical) numbers. Re-running the snapshot at 250 is an unconfirmed
+> TODO (see `findings-and-options.md`).
+
 ## 5. Notes
 
 - **Reproducibility:** permutation seed is fixed; `config.json` records exact parameters and package

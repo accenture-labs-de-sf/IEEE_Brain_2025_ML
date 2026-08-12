@@ -30,7 +30,7 @@ phenomenon from central *mu*; the blue (ERS) often seen posteriorly is not the m
 
 ## Pipeline
 
-1. **Preprocess** (match EEGPT): average reference, 0–38 Hz band-pass, resample 160→256 Hz.
+1. **Preprocess** (match EEGPT): average reference, 0–38 Hz band-pass, resample 160→250 Hz.
    See [`preprocessing.md`](preprocessing.md).
 2. **Epoch** around each imagery cue with a buffer: `tmin = -2.0 s`, `tmax = 4.5 s`, **no** epoch
    baseline (applied later, to the TFR). After the TFR baseline, **crop to −1..3.9 s** to discard

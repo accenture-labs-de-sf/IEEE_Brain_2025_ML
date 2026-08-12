@@ -21,7 +21,7 @@ Applied through the loaders: `load_subject_raw(subj, runs, **EEGPT_RAW_KWARGS)`.
 | Channel-name standardization | 10-10 / 10-05 canonical | `eegbci.standardize` — a *renaming* (`Fc5.`→`FC5`) so EEGPT's name-keyed embeddings match |
 | Reference | **average** | global average reference |
 | Band-pass | **~0–38 Hz** (low-pass 38) | matches EEGPT's MI setting; also suppresses 60 Hz line noise (notch likely unnecessary) |
-| Resample | **256 Hz** | our data is 160 Hz → we **upsample 160 → 256** (expected, not optional) |
+| Resample | **250 Hz** | checkpoint rate (corrects the paper's 256); our data is 160 Hz → **upsample 160 → 250** |
 
 ### 2. Normalization — model input ONLY
 `normalize_epochs(X)` = per-window z-score (per epoch, per channel, over time).
@@ -39,9 +39,18 @@ Applied through the loaders: `load_subject_raw(subj, runs, **EEGPT_RAW_KWARGS)`.
   replication of EEGPT; it is the classical reference (Pfurtscheller ERD/ERS), and linking the
   model's representation to it is the novel contribution.
 
-## Open verification
+## Model input contract (verified from the braindecode checkpoint)
 
-- Confirm the **exact** EEGPT preprocessing/tokenization against **braindecode's EEGPT
-  transform** when wiring up the model (scaling to mV, token length, per-token z-score).
-- Decide whether a mild high-pass (~0.5 Hz) is worth adding for drift, or whether to stay
-  strictly at EEGPT's "0–38".
+Confirmed by loading `braindecode/eegpt-pretrained` and reading its `config.json` — this
+**corrected the paper's stated 256 Hz to 250 Hz**. Handled in `eegxai.models.eegpt`:
+
+- **250 Hz**, window **1000 samples = 4 s** (`n_times = 1000`).
+- **Fixed 62-channel montage**, fed in the model's own order. PhysioNet MI lacks **PO5/PO6**,
+  which are **interpolated** from neighbours. Channel-name matching is **case-insensitive**
+  (EEGPT `FP1/FPZ`; MNE `Fp1/Fpz`).
+- Load with `n_chans=62, chan_proj_type="none", return_encoder_output=True`; encoder returns
+  `(batch, patches, tokens, 512)`, pooled to `(batch, 512)`.
+
+Still **provisional** (revisit if decodability underperforms — the smoke test showed high
+trial-to-trial embedding correlation): the **µV scaling** and the **mean-pooling**; and whether a
+mild high-pass (~0.5 Hz) helps vs. staying strictly at "0–38".

@@ -155,7 +155,7 @@ subjects **{args.subjects}** (n={len(args.subjects)}).
 `decim={DECIM}`. Read-outs: ERDS time-frequency maps at C3/Cz/C4 and mu-band (8–13 Hz)
 topographies over the {TASK_WIN[0]}–{TASK_WIN[1]} s task window. Epochs are buffered
 ({EPOCH_WIN[0]}–{EPOCH_WIN[1]} s) and cropped to {CROP_WIN[0]}–{CROP_WIN[1]} s after baseline to
-remove multitaper edge ringing. Preprocessing matches EEGPT (average ref, 0–38 Hz, 256 Hz).
+remove multitaper edge ringing. Preprocessing matches EEGPT (average ref, 0–38 Hz, 250 Hz).
 Convention: **percent < 0 = ERD** (desync).
 
 **Result — mu lateralization (group, C3 − C4).**
