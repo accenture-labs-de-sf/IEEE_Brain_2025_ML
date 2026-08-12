@@ -36,6 +36,21 @@ Method: **canonical MNE ERDS** — multitaper TFR + percent baseline, buffered e
 Both adopted methods are grounded in canonical + recent (2023–2025) literature — see the
 References section of [`analysis-methods.md`](analysis-methods.md).
 
+## Tier B — model analysis (in progress)
+
+- **EEGPT encoder features load and run** (braindecode, 62 ch / 250 Hz). But the **latent
+  linear-probe was inconclusive**: left/right barely decodes (EEGPT ~52–56%) and its
+  **permutation null overlaps** — *and the classical mu/β baseline is also at chance*. So the probe
+  can't separate "representation weak" from "left/right just hard here" (our baseline was simple
+  power, not CSP). Not evidence either way — don't over-read it.
+- **Pivot to the decoded-signal route** (encoder + reconstructor). EEGPT is a masked autoencoder, so
+  its **reconstruction** is the quality-optimized, interpretable output; we run ERDS on
+  reconstructed EEG (masked → non-circular). **Full-model smoke check passed** — checkpoint loads
+  clean (0 missing/unexpected), masked reconstruction emits finite signal patches. See
+  [`eegpt-reconstruction.md`](eegpt-reconstruction.md).
+- Still useful: a **stronger decodability gate** (movement-vs-rest + a CSP ceiling) to cleanly
+  separate "model issue" from "task too hard".
+
 ## TODO (unconfirmed by lead)
 
 - **Re-run the n=20 ERDS snapshot at 250 Hz.** The sampling rate was corrected 256 → **250 Hz**

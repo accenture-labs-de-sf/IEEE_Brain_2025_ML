@@ -163,6 +163,17 @@ Implications:
   XAI / RSA — the gap the paper left open (it proved accuracy, never showed the representation
   encodes known brain structure).
 
+## Approach update — decoded-signal route (Tier B)
+
+The latent linear-probe on EEGPT encoder features was **inconclusive** (see
+[`findings-and-options.md`](findings-and-options.md)). Since EEGPT is a masked autoencoder that
+optimizes *reconstruction* quality, we added a second, more interpretable evaluation: load the
+**full model (encoder + reconstructor)** and run the ERDS analysis on **reconstructed** EEG
+(masked, to stay non-circular). Two model paths now coexist — encoder features (braindecode,
+62 ch / 250 Hz) and full reconstruction (original Figshare checkpoint, 58 ch / 256 Hz). Setup +
+status: [`eegpt-reconstruction.md`](eegpt-reconstruction.md). Full-model smoke check has passed;
+real-data reconstruction → ERDS is next.
+
 ## 7. Open decisions
 
 > Empirical-characterization method choices (ERD sharpening, ERDS, bands, etc.) live in
