@@ -18,8 +18,8 @@ data/external/*
 *.pth
 *.ckpt
 *.safetensors
-models/
-checkpoints/
+/models/
+/checkpoints/
 
 # Downloaded pretrained weights / HF cache
 .cache/
