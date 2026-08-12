@@ -76,6 +76,8 @@ weights onto the scalp as "connectivity" — both are ill-posed or over-claiming
 
 ## Documentation
 
+- [`docs/reproducing-tier-a.md`](docs/reproducing-tier-a.md) — **collaborator runbook**: reproduce the empirical ERDS reference step by step.
+- [`docs/analysis-methods.md`](docs/analysis-methods.md) — ERDS/cluster-stats concepts, pipeline, and references.
 - [`docs/research-plan.md`](docs/research-plan.md) — technical decisions and decision log (the *why*).
 - [`docs/submission-strategy.md`](docs/submission-strategy.md) — positioning, submission pathway, timeline, and risk management.
 

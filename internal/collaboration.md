@@ -68,6 +68,8 @@ science the lead defined.
 
 ## Ground rules
 
+- **Start by reproducing Tier A**: follow [`docs/reproducing-tier-a.md`](../docs/reproducing-tier-a.md)
+  and verify your numbers against [`reports/mi_erds_n20/`](../reports/mi_erds_n20) before building on it.
 - Branch from `main`; open a PR (don't push to `main` directly).
 - Don't modify the analysis logic/interfaces; optimizations and narration go *around* them.
 - If a branch's run disagrees with the golden fixture, that's a finding — raise it, don't
