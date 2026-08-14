@@ -48,8 +48,14 @@ References section of [`analysis-methods.md`](analysis-methods.md).
   reconstructed EEG (masked → non-circular). **Full-model smoke check passed** — checkpoint loads
   clean (0 missing/unexpected), masked reconstruction emits finite signal patches. See
   [`eegpt-reconstruction.md`](eegpt-reconstruction.md).
-- Still useful: a **stronger decodability gate** (movement-vs-rest + a CSP ceiling) to cleanly
-  separate "model issue" from "task too hard".
+- **Decoded-signal ERD is invalid** — the reconstructor's output is *per-patch normalized*, so
+  percent-baseline ERD explodes (confirmed empirically). Faithfulness therefore moved to **decode +
+  RSA** (no baseline needed).
+- **Pivot → imagery-vs-rest.** Left/right is a weak contrast (classical ceiling only ~55%);
+  imagery-vs-rest is strong. Current results (n=20): EEGPT decode **73% within / 58% cross**
+  (best of three, p=.01); RSA — embedding geometry mirrors **mu/β structure beyond the task label**
+  (partial r=**0.36**, p≈1e-11). **This is the working analysis** —
+  see [`pivot-analysis.md`](pivot-analysis.md).
 
 ## TODO (unconfirmed by lead)
 

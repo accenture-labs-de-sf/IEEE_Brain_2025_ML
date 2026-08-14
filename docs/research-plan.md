@@ -171,8 +171,10 @@ optimizes *reconstruction* quality, we added a second, more interpretable evalua
 **full model (encoder + reconstructor)** and run the ERDS analysis on **reconstructed** EEG
 (masked, to stay non-circular). Two model paths now coexist — encoder features (braindecode,
 62 ch / 250 Hz) and full reconstruction (original Figshare checkpoint, 58 ch / 256 Hz). Setup +
-status: [`eegpt-reconstruction.md`](eegpt-reconstruction.md). Full-model smoke check has passed;
-real-data reconstruction → ERDS is next.
+status: [`eegpt-reconstruction.md`](eegpt-reconstruction.md). Full-model smoke check passed, **but
+running our ERD on the reconstruction proved invalid** (its per-patch normalization breaks
+percent-baseline ERD). **The analysis pivoted** to imagery-vs-rest with **decode + RSA** readouts
+(no baseline needed) — see [`pivot-analysis.md`](pivot-analysis.md), now the working analysis.
 
 ## 7. Open decisions
 

@@ -76,6 +76,7 @@ weights onto the scalp as "connectivity" — both are ill-posed or over-claiming
 
 ## Documentation
 
+- [`docs/pivot-analysis.md`](docs/pivot-analysis.md) — ⭐ **current direction**: imagery-vs-rest decode + RSA on EEGPT embeddings (why we pivoted, results, how to run).
 - [`docs/reproducing-tier-a.md`](docs/reproducing-tier-a.md) — **collaborator runbook**: reproduce the empirical ERDS reference step by step.
 - [`docs/analysis-methods.md`](docs/analysis-methods.md) — ERDS/cluster-stats concepts, pipeline, and references.
 - [`docs/eegpt-reconstruction.md`](docs/eegpt-reconstruction.md) — **approach update**: the decoded-signal (masked-reconstruction) route + checkpoint setup.
@@ -104,10 +105,12 @@ via MOABB). See [`data/README.md`](data/README.md).
 
 ## Status
 
-🟡 **Scaffolding / planning.** Analysis pipeline not yet built. Feasibility half-check done: EEGPT
-ingests standard montages via name-keyed channel embeddings; remaining gate is an embedding
-"smoke test" (confirm representations carry decodable signal). See
-[`docs/research-plan.md`](docs/research-plan.md).
+🟢 **Tier A done** — canonical ERDS empirical reference (n=20, significant contralateral ERD;
+`reports/mi_erds_n20/`).
+🟢 **Tier B underway (pivoted)** — EEGPT loads/runs; the decoded-signal ERD route proved invalid,
+so faithfulness moved to **imagery-vs-rest decode + RSA**. Current: EEGPT decode 73% within / 58%
+cross; RSA geometry mirrors mu/β structure (partial r=0.36, p≈1e-11). **Start here:**
+[`docs/pivot-analysis.md`](docs/pivot-analysis.md).
 
 ## Key dates
 
