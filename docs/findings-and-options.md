@@ -51,11 +51,19 @@ References section of [`analysis-methods.md`](analysis-methods.md).
 - **Decoded-signal ERD is invalid** — the reconstructor's output is *per-patch normalized*, so
   percent-baseline ERD explodes (confirmed empirically). Faithfulness therefore moved to **decode +
   RSA** (no baseline needed).
-- **Pivot → imagery-vs-rest.** Left/right is a weak contrast (classical ceiling only ~55%);
-  imagery-vs-rest is strong. Current results (n=20): EEGPT decode **73% within / 58% cross**
-  (best of three, p=.01); RSA — embedding geometry mirrors **mu/β structure beyond the task label**
-  (partial r=**0.36**, p≈1e-11). **This is the working analysis** —
-  see [`pivot-analysis.md`](pivot-analysis.md).
+- **Pivot to imagery-vs-rest** (working analysis; see [`pivot-analysis.md`](pivot-analysis.md)).
+  Left/right is a weak contrast (classical ceiling only ~55%); imagery-vs-rest is strong.
+  - **Decode (n=20):** EEGPT 73% within / 58% cross, best of three (CSP 76/55, band-power 63/57),
+    cross significant (p=.01).
+  - **RSA (n=20):** after Autoreject cleaning and a non-motor control band, EEGPT's geometry
+    correlates with band-power **broadly but NOT specifically with mu** (mu 0.18 ≈ control 0.17;
+    beta 0.23 modestly higher). The earlier "mirrors mu" reading (r=0.36) did not survive the
+    control band.
+  - **Narrative:** EEGPT decodes competently and transfers across subjects, but its representation
+    is **spectrally non-specific** (aggregate signal structure, not the mu/beta rhythms clinicians
+    rely on). A trust-relevant XAI finding. Likely a total-power effect (unconfirmed).
+  - **Next (to firm up):** partial out total power; confirm bands are distinct/task-carrying;
+    optional layer/token probe (tokenization limitation hypothesis).
 
 ## TODO (unconfirmed by lead)
 

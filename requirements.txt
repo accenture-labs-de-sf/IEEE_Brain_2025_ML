@@ -8,6 +8,7 @@ matplotlib>=3.7
 # EEG / neuro
 mne>=1.6
 moabb>=1.1            # standardized BCI dataset loaders (motor imagery, SSVEP)
+autoreject>=0.4      # conservative artifact cleaning (Jas et al. 2017)
 
 # Deep learning + foundation models
 torch>=2.1
