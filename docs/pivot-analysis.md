@@ -1,7 +1,8 @@
 # Pivot: imagery vs rest, decode and RSA
 
 This is the current direction. Read it to understand what we are doing now, why, the findings so
-far, and how to run it.
+far, and how to run it. A tracked report with the figures is at
+[`reports/pivot/report.pdf`](../reports/pivot/report.pdf).
 
 ## Why we study the encoder representation (not the reconstruction)
 EEGPT's reusable value is its **encoder embedding**. That is the vector downstream tasks freeze and
