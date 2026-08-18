@@ -20,6 +20,10 @@ markdown>=3.5
 xhtml2pdf>=0.2.16
 pillow>=10.0
 
+# Figures (publication-style composition; used by scripts/make_paper_figures.py)
+scienceplots>=2.1     # Nature/IEEE matplotlib styles
+svgutils>=0.3         # compose vector panels into multipanel figures
+
 # Utilities
 tqdm>=4.66
 pyyaml>=6.0          # experiment configs
