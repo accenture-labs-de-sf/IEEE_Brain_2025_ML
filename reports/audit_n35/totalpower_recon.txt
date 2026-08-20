@@ -1,0 +1,16 @@
+TOTAL-POWER PROXY RECONCILIATION  (n=35 subjects, double control task+power)
+
+[broadband_var]  embedding~total-power Spearman = 0.243
+  band            |task+power          p   subj>0
+  mu                    0.168    9.4e-10     0.94
+  beta                  0.160    2.4e-09     0.89
+  control 2-7           0.032    6.7e-02     0.66
+  control 30-40         0.137    1.0e-07     0.91
+
+[summed_band_power]  embedding~total-power Spearman = 0.320
+  band            |task+power          p   subj>0
+  mu                    0.090    1.9e-04     0.80
+  beta                  0.085    1.4e-04     0.77
+  control 2-7          -0.080    8.5e-04     0.29
+  control 30-40         0.084    2.7e-04     0.74
+

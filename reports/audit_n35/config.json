@@ -1,0 +1,95 @@
+{
+  "dataset": "PhysioNet EEGMMIDB, imagery runs 4/8/12, imagery-vs-rest",
+  "subjects": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35
+  ],
+  "excluded_bad_subjects": [
+    88,
+    89,
+    92,
+    100
+  ],
+  "n_subjects": 35,
+  "n_trials": 2891,
+  "bands_hz": {
+    "mu": [
+      8,
+      13
+    ],
+    "beta": [
+      13,
+      30
+    ],
+    "ctl_low": [
+      2,
+      7
+    ],
+    "ctl_high": [
+      30,
+      40
+    ]
+  },
+  "sensorimotor_channels": [
+    "FC3",
+    "FC1",
+    "FCZ",
+    "FC2",
+    "FC4",
+    "C3",
+    "C1",
+    "CZ",
+    "C2",
+    "C4",
+    "CP3",
+    "CP1",
+    "CPZ",
+    "CP2",
+    "CP4"
+  ],
+  "preprocessing": "average reference, 0-38 Hz, 250 Hz, Autoreject",
+  "readouts": "EEGPT frozen mean-pooled embeddings; RSA with task + total-power double control",
+  "package_versions": {
+    "numpy": "2.5.1",
+    "scipy": "1.18.0",
+    "mne": "1.12.1",
+    "braindecode": "1.7.0",
+    "torch": "2.13.0",
+    "autoreject": "0.4.4",
+    "sklearn": "1.9.0",
+    "scienceplots": null
+  }
+}

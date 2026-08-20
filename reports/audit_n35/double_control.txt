@@ -1,0 +1,13 @@
+DOUBLE-CONTROL RSA  (n=35 subjects, 2891 trials)
+
+embedding geometry vs TOTAL power: Spearman 0.243 (t-test p=1.6e-14)
+
+band               raw    |task  |task+power   p (task+power)   subj>0
+mu               0.225    0.209        0.168          9.4e-10     0.94
+beta             0.227    0.214        0.160          2.4e-09     0.89
+control 2-7      0.182    0.161        0.032          6.7e-02     0.66
+control 30-40    0.192    0.189        0.137          1.0e-07     0.91
+
+Reading: 'raw' is model~band; '|task' controls task only; '|task+power' also
+removes total power (the definitive column). 'subj>0' is the fraction of subjects
+with a positive double-controlled partial (a consistency check).
