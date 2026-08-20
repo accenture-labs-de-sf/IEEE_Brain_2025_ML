@@ -70,3 +70,6 @@ Thumbs.db
 # ─── Secrets / local config ─────────────────────────────────────────────────
 .env
 *.local
+
+# Internal comms notes (not for the remote)
+reports/draft/comms_translation.md
