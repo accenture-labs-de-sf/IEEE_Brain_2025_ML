@@ -1,0 +1,22 @@
+SPATIAL / FREQUENCY SPECIFICITY CONTROL (aperiodic-adjusted power, n=35)
+
+Test 1 - per-channel aperiodic-adjusted band power (|task), all 64 channels:
+  band       mean r          p   subj>0
+  theta    (ctl)    0.089    5.4e-10     0.91
+  mu                0.130    1.8e-10     0.94
+  beta              0.113    1.3e-09     0.91
+  gamma    (ctl)    0.088    1.1e-08     0.91
+  paired motor-vs-control (per-subject, is the gap reliable):
+    mu - theta: +0.041  paired p=0.0018  subj>0 0.80
+    mu - gamma: +0.042  paired p=0.00032  subj>0 0.77
+    beta - theta: +0.025  paired p=0.15  subj>0 0.63
+    beta - gamma: +0.026  paired p=0.067  subj>0 0.54
+
+Test 2 - central (sensorimotor) vs occipital mu (mu-vs-alpha):
+  central mu |task              0.061  (p=4.1e-07)
+  occipital mu |task            0.027  (p=2.0e-03)
+  central mu | task+occipital   0.057  (p=1.5e-06)
+  occipital mu | task+central   0.021  (p=1.3e-02)
+
+Test 3 - permutation null for whole-head mu (|task), 1000 perms:
+  observed group mean 0.130; null mean 0.000 (sd 0.009); p = 0.000999
