@@ -1,0 +1,14 @@
+PERIODIC vs APERIODIC RSA  (n=35 subjects, 2891 trials)
+trials with a detected mu or beta peak: 99%
+
+candidate                  raw    |task  |task+aper  p(|task+aper)
+aperiodic (off+exp)      0.222    0.200       0.200        3.6e-12
+periodic (mu+beta pk)    0.177    0.175       0.169        7.2e-09
+offset                   0.200    0.179       0.002        9.3e-01
+exponent                 0.179    0.158      -0.064        6.4e-04
+mu peak                    nan    0.185       0.186        2.1e-07
+beta peak                0.069    0.065       0.058        6.4e-04
+
+Reading: 'raw' is embedding~candidate; '|task' controls task; '|task+aper'
+additionally removes the aperiodic component (for periodic/peak candidates), i.e.
+does oscillatory structure survive once 1/f is accounted for.
