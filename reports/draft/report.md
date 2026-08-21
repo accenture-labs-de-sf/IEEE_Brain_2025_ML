@@ -26,7 +26,7 @@ Recent audits report that EEG foundation models lean on the aperiodic background
 
 ## 3. Methods
 
-**Data and model.** We use PhysioNet motor imagery (imagery runs), imagery versus rest, 35 subjects, cleaned conservatively with Autoreject [12]. We audit the frozen EEGPT encoder, using its 512 dimensional embeddings (braindecode weights, mean pooled) as they are used downstream. The same cleaned trials feed the model and the spectral references.
+**Data and model.** We use PhysioNet motor imagery (imagery runs), imagery versus rest, 35 subjects (2891 four-second trials, ~83 per subject), cleaned conservatively with Autoreject [12]. We audit the frozen EEGPT encoder, using its 512 dimensional embeddings (braindecode weights, mean pooled) as they are used downstream. The same cleaned trials feed the model and the spectral references.
 
 EEGPT is trained with a dual self supervised objective [6]: masked reconstruction of the signal, plus a spatio temporal representation alignment in which a predictor matches the encoder's latent representations of masked patches to those produced by a momentum updated target encoder. The alignment loss lives in representation space, a JEPA-like latent prediction rather than pixel reconstruction, and is meant to capture consistent, high signal to noise structure. Despite its name EEGPT is not an autoregressive model; the added latent alignment is what distinguishes it from the pure masked reconstruction models above.
 
@@ -38,7 +38,7 @@ EEGPT is trained with a dual self supervised objective [6]: masked reconstructio
 
 ### 4.1 EEGPT decodes the task and its geometry is dominated by aggregate power
 
-EEGPT decodes imagery versus rest at ≈ 71% within subject (chance 50%), on par with feature engineered baselines, and transfers modestly across subjects. Yet its representational geometry is dominated by aggregate power: it correlates with total signal power at Spearman r ≈ 0.24–0.32 (depending on the total-power proxy), higher than with any single band (Figure 1a, 1b).
+A linear classifier on the frozen embeddings decodes imagery versus rest at ≈ 71% within subject (chance 50%), on par with feature engineered baselines, and transfers modestly across subjects (leave-one-subject-out ≈ 60%, chance 50%, 31 of 35 subjects above chance), within the modest range reported for cross-subject motor imagery [13] and consistent with a power-dominated representation. Yet its representational geometry is dominated by aggregate power: it correlates with total signal power at Spearman r ≈ 0.24–0.32 (depending on the total-power proxy), higher than with any single band (Figure 1a, 1b).
 
 ### 4.2 The specificity verdict depends on the analysis
 
@@ -87,3 +87,4 @@ We audit EEGPT, an alignment plus reconstruction EEG foundation model absent fro
 [10] Gerster et al. Separating neural oscillations from aperiodic 1/f activity: challenges and recommendations. Neuroinformatics, 2022.
 [11] Blankertz et al. Optimizing spatial filters for robust EEG single trial analysis (CSP). IEEE Signal Processing Magazine, 2008.
 [12] Jas et al. Autoreject: Automated artifact rejection for MEG and EEG data. NeuroImage, 2017.
+[13] Jayaram, Barachant. MOABB: trustworthy algorithm benchmarking for BCIs. Journal of Neural Engineering, 2018.
