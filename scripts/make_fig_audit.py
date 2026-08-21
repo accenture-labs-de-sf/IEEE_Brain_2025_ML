@@ -125,11 +125,10 @@ def panel_b_bars(ax, band_mean, totpow):
     ax.set_ylabel("RSA with EEGPT geometry", fontsize=8)
     ax.set_ylim(0, max(totpow, max(vals)) * 1.25)
     for i, v in enumerate(vals):
-        ax.text(i, v + 0.004, f"{v:.2f}", ha="center", fontsize=7)
-    # mu-vs-control gap annotation
-    ax.annotate("", xy=(0, band_mean["mu"]), xytext=(3, band_mean["gamma"]),
-                arrowprops=dict(arrowstyle="-", color=INK, lw=0.5))
-    ax.text(1.5, band_mean["mu"] + 0.02, "mu > ctl  Δ≈0.04\n(p≈0.001)", ha="center", fontsize=6.4, color=INK)
+        ax.text(i, v + 0.006, f"{v:.2f}", ha="center", fontsize=7)
+    # mu-vs-control gap note, placed in the clear band between the bars and the total-power line
+    ax.text(1.5, 0.195, "mu > control:  Δr ≈ 0.04  (p ≈ 0.001)", ha="center",
+            va="center", fontsize=6.6, color=INK)
     ax.set_title("Power dominates; mu a small trend", fontsize=8.5, pad=3)
     ax.tick_params(labelsize=7)
     for sp in ("top", "right"):
