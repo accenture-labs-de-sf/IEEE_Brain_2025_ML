@@ -26,7 +26,7 @@ Recent audits report that EEG foundation models lean on the aperiodic background
 
 ## 3. Methods
 
-**Data and model.** We use PhysioNet motor imagery (imagery runs), imagery versus rest, 35 subjects (2891 four-second trials, ~83 per subject), cleaned conservatively with Autoreject [12]. We audit the frozen EEGPT encoder, using its 512 dimensional embeddings (braindecode weights, mean pooled) as they are used downstream. The same cleaned trials feed the model and the spectral references.
+**Data and model.** We use PhysioNet motor imagery (imagery runs), imagery versus rest, 35 subjects (2891 cued four-second trials, ~83 per subject, each a single imagery or rest period from the cued runs), cleaned conservatively with Autoreject [12]. We audit the frozen EEGPT encoder, using its 512 dimensional embeddings (braindecode weights, mean pooled) as they are used downstream. The same cleaned trials feed the model and the spectral references.
 
 EEGPT is trained with a dual self supervised objective [6]: masked reconstruction of the signal, plus a spatio temporal representation alignment in which a predictor matches the encoder's latent representations of masked patches to those produced by a momentum updated target encoder. The alignment loss lives in representation space, a JEPA-like latent prediction rather than pixel reconstruction, and is meant to capture consistent, high signal to noise structure. Despite its name EEGPT is not an autoregressive model; the added latent alignment is what distinguishes it from the pure masked reconstruction models above.
 

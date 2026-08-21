@@ -38,8 +38,9 @@ Please reproduce independently from the committed code and confirm the numbers m
 Acceptance: an independent run on a different machine yields the same numbers and figure.
 
 ## Non-blocking, still open
-- **Title**: choice pending (leading candidate keeps the rhythm-vs-power question).
 - **Author/affiliation placeholders** in the abstract and report.
+- (Title decided: kept "Sensorimotor Rhythm or Aggregate Power? An Interpretability Audit of
+  EEGPT on Motor Imagery".)
 
 ## Not started (secondary, journal not poster)
 - Head-to-head RSA vs pure-reconstruction models (LaBraM/CBraMod), cross-subject RSA, a second
