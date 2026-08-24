@@ -22,14 +22,11 @@ one figure).
 
 ## Brief description (100 words)
 
-We audit EEGPT, a recent EEG foundation model (NeurIPS 2024), asking whether its representation is
-grounded in the sensorimotor rhythm or in aggregate signal power. On PhysioNet motor imagery (35
-subjects), EEGPT decodes imagined movement versus rest about as well as classical baselines, yet
-its embedding geometry tracks aggregate, largely aperiodic power more than any oscillation. A
-parameterized, spatially controlled analysis leaves only a small, consistent trend toward the
-sensorimotor mu rhythm. Because raw band power conflates periodic and aperiodic activity, apparent
-rhythm specificity depends on the analysis, a caution for interpretability audits of EEG foundation
-models.
+We audit what EEGPT, an EEG foundation model, encodes about motor imagery. A linear probe on its
+frozen embeddings decodes the task about as well as feature engineered baselines, yet the embedding
+geometry is dominated by aggregate, largely aperiodic signal power. A parameterized, spatially
+controlled analysis leaves only a small, consistent trend toward the sensorimotor mu rhythm, not a
+strong rhythm specific representation.
 
 ## Two-stage plan
 
