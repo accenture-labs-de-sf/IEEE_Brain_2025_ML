@@ -73,3 +73,8 @@ Thumbs.db
 
 # Internal comms notes (not for the remote)
 reports/draft/comms_translation.md
+
+# Local context-management scaffolding (kept local, never pushed to the remote)
+CLAUDE.md
+SESSION-STATE-*.md
+AI-STYLE-GUARDRAILS.md
