@@ -22,11 +22,13 @@ one figure).
 
 ## Brief description (100 words)
 
-We audit what EEGPT, an EEG foundation model, encodes about motor imagery. A linear probe on its
-frozen embeddings decodes the task about as well as feature engineered baselines, yet the embedding
-geometry is dominated by aggregate, largely aperiodic signal power. A parameterized, spatially
-controlled analysis leaves only a small, consistent trend toward the sensorimotor mu rhythm, not a
-strong rhythm specific representation.
+We audit what EEGPT, an EEG foundation model, encodes about motor imagery. Its pretraining pairs
+masked reconstruction with a representation alignment objective meant to capture consistent, high
+signal to noise structure. A linear probe on its frozen embeddings decodes the task about as well
+as feature engineered baselines. Despite that design, the embedding geometry is dominated by
+aggregate, largely aperiodic signal power. A parameterized, spatially controlled analysis leaves
+only a small, consistent trend toward the sensorimotor mu rhythm, not a strong rhythm specific
+representation.
 
 ## Two-stage plan
 
