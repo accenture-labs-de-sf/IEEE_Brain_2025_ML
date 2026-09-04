@@ -112,7 +112,7 @@ def _md_to_pdf(md_text: str, pdf_path: Path, base_dir: Path) -> None:
         "body{font-family:Helvetica,Arial,sans-serif;font-size:11px;line-height:1.4}"
         "h1{font-size:20px} h2{font-size:15px;margin-top:14px}"
         "table{border-collapse:collapse;margin:6px 0} td,th{border:1px solid #999;padding:3px 7px}"
-        "img{max-width:520px}"
+        "p.caption{font-size:9px;line-height:1.35;color:#3a3a3a;margin:3px 0 10px}"
         f"</style></head><body>{body}</body></html>"
     )
 

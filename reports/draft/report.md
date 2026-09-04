@@ -46,7 +46,7 @@ The evidence for EEGPT's sensorimotor specificity flips with the method. Using r
 
 ### 4.3 A small, controlled mu trend
 
-Holding the spatial construction fixed (aperiodic-adjusted oscillatory power, all 64 channels) resolves it (Table 1, Figure 1c). Motor bands sit only modestly above non motor controls: mu 0.130, beta 0.113, versus theta 0.089 and gamma 0.088. The mu gap is reliable across subjects (mu above theta p ≈ 0.002; mu above gamma p ≈ 0.0003; positive in roughly 80% of subjects), whereas beta is not (p ≈ 0.07–0.15). The mu effect is stronger over central than occipital channels (central mu 0.061 versus occipital 0.027; central survives controlling occipital, p < 0.001), a scalp-topographic distinction, not source localization, consistent with sensorimotor mu rather than posterior alpha [7], and it exceeds a trial shuffling null (whole head mu 0.130 versus null 0.000 ± 0.009, p ≈ 0.001). We read this as a small, consistent trend toward a sensorimotor mu component, not an established component: at n = 35 it is detectable but small, and whether it holds at larger samples is open, since significance reflects detectability, not magnitude.
+Holding the spatial construction fixed (aperiodic-adjusted oscillatory power, all 64 channels) resolves it (Table 1, Figure 1b). Motor bands sit only modestly above non motor controls: mu 0.130, beta 0.113, versus theta 0.089 and gamma 0.088. The mu gap is reliable across subjects (mu above theta p ≈ 0.002; mu above gamma p ≈ 0.0003; positive in roughly 80% of subjects), whereas beta is not (p ≈ 0.07–0.15). The mu effect is stronger over central than occipital channels (Figure 1c; central mu 0.061 versus occipital 0.027; central survives controlling occipital, p < 0.001), a scalp-topographic distinction, not source localization, consistent with sensorimotor mu rather than posterior alpha [7], and it exceeds a trial shuffling null (whole head mu 0.130 versus null 0.000 ± 0.009, p ≈ 0.001). We read this as a small, consistent trend toward a sensorimotor mu component, not an established component: at n = 35 it is detectable but small, and whether it holds at larger samples is open, since significance reflects detectability, not magnitude.
 
 Table 1. Aperiodic-adjusted oscillatory power tracked by the embedding geometry (per channel, task controlled, n = 35).
 
@@ -57,7 +57,9 @@ Table 1. Aperiodic-adjusted oscillatory power tracked by the embedding geometry 
 | theta (4–7, control) | 0.089 | reference |
 | gamma (30–45, control) | 0.088 | reference |
 
-![Figure 1. The audit on real data (n = 35). (a) Grand-average sensorimotor power spectrum with its fitted aperiodic 1/f component and the mu peak above it. (b) The embedding geometry tracks aggregate total power strongly (dashed line, Spearman ≈ 0.24), while the aperiodic-adjusted oscillatory bands are small and mu sits only ≈ 0.04 above the non-motor control bands. (c) Per-channel alignment of aperiodic-adjusted mu power with the embedding geometry (task controlled) is central-weighted, consistent with sensorimotor mu rather than posterior alpha.](figures/fig1_overview.png)
+![Figure 1](figures/fig1_overview.png)
+
+<p class="caption">Figure 1. Auditing EEGPT on motor imagery (PhysioNet, n = 35 subjects, 2891 cued 4 s trials). (a) Grand-average sensorimotor spectrum with its fitted aperiodic 1/f component and the mu peak above it. (b) The embedding geometry tracks aggregate total power (dashed, r ≈ 0.24) far more than any aperiodic-adjusted band; mu sits only ≈ 0.04 above the non-motor controls. (c) Mu and posterior alpha share the 8-13 Hz band, so the trend is tested against location: alignment is much stronger over central than occipital electrodes and survives partialling out the other region (dots are subjects). Electrode regions are channel space, not source localization.</p>
 
 ## 5. Discussion
 

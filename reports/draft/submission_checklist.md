@@ -14,9 +14,11 @@ one figure).
 - **Title**: Sensorimotor Rhythm or Aggregate Power? An Interpretability Audit of EEGPT on Motor Imagery.
 - **Track**: Machine Learning and Computer Paradigms for Brain Discovery.
 - **Brief description (100 words max)**: see below.
-- **Abstract (1 page)**: paste the text of `abstract_1page.md` (sections Introduction through
-  Significance, plus references if the box allows). Likely a text box, so no embedded figure.
-- **Image/Graphic (single PDF)**: upload `figures/fig1_overview.pdf`.
+- **Abstract (1 page)**: paste the body of `abstract_1page.md` (the four paragraphs, background through
+  significance, plus references if the box allows). Plain-text box, so no bold and no embedded figure.
+- **Image/Graphic (single PDF)**: upload `figures/fig1_overview_captioned.pdf`. The caption is
+  baked in, since the form takes the figure separately from the abstract text and the plain
+  `fig1_overview.pdf` would arrive with no explanation.
 - **Societies**: check any that apply (IEEE Brain, IEEE, SPS, EMBS, SMC, etc.).
 - **Prior attendance / presentation**: answer as applicable.
 
