@@ -1,0 +1,6 @@
+# LaTeX build artifacts; paper.pdf is committed as the deliverable
+*.aux
+*.bbl
+*.blg
+*.log
+*.out

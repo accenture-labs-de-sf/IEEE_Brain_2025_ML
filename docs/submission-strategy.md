@@ -62,13 +62,16 @@ extensions mature for the journal.
 | Date | Milestone |
 | --- | --- |
 | **Now → mid-Aug** | Pass embedding smoke test; build Motor Imagery RSA + faithfulness result + figure |
-| **21 Aug 2026** | **Early abstract submission** |
+| **30 Sep 2026** | **Early abstract submission** (priority review + travel support) |
 | **Aug → Oct** | Add SSVEP (second axis); polish figures; cross-subject analysis |
-| **13 Oct 2026** | Final abstract deadline (fallback) |
+| **19 Oct 2026** | Final abstract deadline (fallback) |
 | **11–13 Nov 2026** | Workshop — present poster / demo |
 | **1 Dec 2026** | **THMS full-paper submission** (extension) |
 
-Target the **early** deadline (Aug 21); treat Oct 13 as fallback only.
+Target the **early** deadline (Sep 30); treat Oct 19 as fallback only. Early submissions get
+priority for review/approval and for travel support requests. Note the THMS window is only about
+two and a half weeks after the workshop ends, so the extension has to be largely written before
+we present.
 
 ## 7. Scope discipline (what we will *not* do)
 

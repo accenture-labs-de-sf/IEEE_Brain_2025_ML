@@ -47,5 +47,5 @@ Acceptance: an independent run on a different machine yields the same numbers an
   model, and a causal (attribution/erasure) test. These are the "30% new" for the THMS extension.
 
 ## Timeline
-Target submission mid-September; workshop final deadline Oct 13, 2026; workshop Nov 11-13,
+Target submission mid-September; early deadline Sep 30, 2026, final Oct 19, 2026; workshop Nov 11-13,
 Washington DC. The full-length THMS journal paper is a separate, later submission.
